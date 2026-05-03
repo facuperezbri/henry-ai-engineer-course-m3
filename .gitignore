@@ -1,0 +1,52 @@
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tests y calidad
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ChromaDB (persistencia local habitual)
+chroma/
+chroma_db/
+.chroma/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE (opcional: quitar .vscode/ si versionáis settings del proyecto)
+.idea/
+.vscode/
