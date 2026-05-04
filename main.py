@@ -3,6 +3,18 @@ from src.agents.orchestrator import Orchestrator
 from src.agents.hr_agent import HRAgent
 from src.agents.tech_agent import TechAgent
 from src.agents.finance_agent import FinanceAgent
+from src.utils.logger import logger, console
+from rich.table import Table
+
+
+def display_route(query, destination, reasoning):
+    table = Table(title="Desvío de Consulta")
+    table.add_column("Usuario", style="cyan")
+    table.add_column("Agente Destino", style="magenta")
+    table.add_column("Razonamiento", style="green")
+
+    table.add_row(query, destination.upper(), reasoning)
+    console.print(table)
 
 
 def main():
@@ -23,6 +35,9 @@ def main():
         print("🔍 Analizando intención...")
         route_info = orchestrator.route(query=user_query)
         dest = route_info["destination"]
+
+        display_route(
+            user_query, dest, route_info['reasoning'])
 
         print(
             f"➡️ Derivando a Agente: {dest.upper()} (Razón: {route_info['reasoning']})")
