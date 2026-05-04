@@ -37,7 +37,8 @@ class HRAgent:
     def get_response(self, query: str):
         """Creamos la cadena de recuperación de información"""
         retriever = self.vector_store.as_retriever(search_kwargs={"k": 3})
-        combine_docs_chain = create_stuff_documents_chain(self.llm, self.prompt)
+        combine_docs_chain = create_stuff_documents_chain(
+            self.llm, self.prompt)
         rag_chain = create_retrieval_chain(retriever, combine_docs_chain)
 
         return rag_chain.invoke({"input": query})
