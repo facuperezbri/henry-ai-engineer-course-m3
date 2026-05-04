@@ -1059,6 +1059,7 @@ dependencies = [
     { name = "langfuse" },
     { name = "openai" },
     { name = "python-dotenv" },
+    { name = "rich" },
     { name = "tiktoken" },
 ]
 
@@ -1073,6 +1074,7 @@ requires-dist = [
     { name = "langfuse", specifier = ">=4.5.1" },
     { name = "openai", specifier = ">=2.33.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
+    { name = "rich", specifier = ">=15.0.0" },
     { name = "tiktoken", specifier = ">=0.12.0" },
 ]
 
