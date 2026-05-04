@@ -1,25 +1,15 @@
 from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
-from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from src.config import Config
+from src.agents.base_agent import BaseAgent
+from src.utils.logger import logger
 
 
-class FinanceAgent:
+class FinanceAgent(BaseAgent):
     """Agente RAG de Finanzas consultando documentación financiera en Chroma."""
 
     def __init__(self):
-        # Conectamos con la base de datos vectorial correspondiente
-        self.embeddings = OpenAIEmbeddings(
-            model="text-embedding-3-small"
-        )
-        self.vector_store = Chroma(
-            persist_directory=str(Config.CHROMA_PATH / "finance"),
-            embedding_function=self.embeddings
-        )
-
-        self.llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+        super().__init__(domain_name="finance")
 
         self.system_prompt = (
             "Eres un experto en Finanzas. Usa los siguientes fragmentos de "
@@ -28,16 +18,34 @@ class FinanceAgent:
             "\n\n"
             "{context}"
         )
+
         self.prompt = ChatPromptTemplate.from_messages([
             ("system", self.system_prompt),
             ("human", "{input}"),
         ])
 
     def get_response(self, query: str):
-        """Creamos la cadena de recuperación de información"""
-        retriever = self.vector_store.as_retriever(search_kwargs={"k": 3})
-        combine_docs_chain = create_stuff_documents_chain(
-            self.llm, self.prompt)
-        rag_chain = create_retrieval_chain(retriever, combine_docs_chain)
+        """Ejecuta la cadena RAG para obtener una respuesta basada en la base de conocimientos."""
+        logger.info(f"🧠 Agente Finance procesando consulta: '{query[:50]}...'")
 
-        return rag_chain.invoke({"input": query})
+        try:
+            combine_docs_chain = create_stuff_documents_chain(
+                self.llm, self.prompt)
+
+            retriever = self.vector_store.as_retriever(
+                search_type="similarity",
+                search_kwargs={"k": 3}
+            )
+
+            rag_chain = create_retrieval_chain(retriever, combine_docs_chain)
+
+            response = rag_chain.invoke(
+                {"input": query},
+                config={"callbacks": self.get_callbacks()}
+            )
+
+            return response
+
+        except Exception as e:
+            logger.error(f"❌ Error en FinanceAgent: {e}")
+            return {"answer": "Lo siento, ocurrió un error interno al procesar tu consulta de finanzas."}
