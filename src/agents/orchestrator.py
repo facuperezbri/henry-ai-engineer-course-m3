@@ -32,5 +32,5 @@ class Orchestrator:
 
         self.chain = self.prompt | self.llm | self.parser
 
-        def route(self, query: str):
-            return self.chain.invoke({"query": query})
+    def route(self, query: str):
+        return self.chain.invoke({"query": query})
