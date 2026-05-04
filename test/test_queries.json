@@ -1,0 +1,17 @@
+[
+  { "query": "¿Cuántos días de vacaciones me corresponden?", "expected": "hr" },
+  {
+    "query": "¿Cuál es el stack tecnológico para el frontend?",
+    "expected": "tech"
+  },
+  {
+    "query": "¿Cómo rindo los gastos de mi último viaje?",
+    "expected": "finance"
+  },
+  {
+    "query": "Tengo un problema con mi jefe y quiero denunciarlo",
+    "expected": "hr"
+  },
+  { "query": "¿Qué base de datos usamos para caché?", "expected": "tech" },
+  { "query": "¿Cuál es el presupuesto para IA en 2026?", "expected": "finance" }
+]
