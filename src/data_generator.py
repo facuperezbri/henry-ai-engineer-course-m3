@@ -1,9 +1,13 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from src.config import Config
+from src.utils.logger import logger, console
+from rich.panel import Panel
 
 
 class DataGenerator:
+    """Generador de documentos de prueba para las bases de conocimiento."""
+
     def __init__(self):
         # Inicializamos el modelo de OpenAI
         # Usamos gpt-4o-mini por ser más barato y rápido para esta tarea
@@ -37,6 +41,10 @@ class DataGenerator:
 
     def run(self):
         """Ejecuta la generación de archivos usando la API de OpenAI."""
+
+        console.print(
+            Panel("[bold blue]Iniciando Generación de Datos[/bold blue]"))
+
         Config.validate()
 
         # Definimos temas interesantes para cada área
@@ -58,6 +66,8 @@ class DataGenerator:
             ]
         }
 
+        logger.info("🤖 Llamando a OpenAI para generar contenido...")
+
         for domain, topics in plan_trabajo.items():
             folder = Config.DOMAINS[domain]
             folder.mkdir(parents=True, exist_ok=True)
@@ -69,7 +79,7 @@ class DataGenerator:
                 with open(folder / filename, "w", encoding="utf-8") as f:
                     f.write(content)
 
-        print("\n✅ ¡Todos los documentos han sido generados por el LLM!")
+        logger.success("✅ Documentos creados exitosamente.")
 
 
 if __name__ == "__main__":
